@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Add a new category</h1>
+
+<form action="/category/add" method="post">
+    <label>Name</label>
+    <input name="name" type="text">
+
+    <label>Description</label>
+    <input name="description" type="text">
+
+    <button type="submit">Create</button>
+</form>
+{% endblock %}
