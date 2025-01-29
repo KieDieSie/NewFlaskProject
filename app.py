@@ -11,7 +11,7 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
     description = db.Column(db.Text)
-
+    
     def __repr__(self):
         return f'{self.name} - {self.description}'
 
@@ -23,10 +23,13 @@ class Post(db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"), nullable=False)
     category = db.relationship("Category", backref=db.backref("posts", lazy=True))
 
+@app.route("/")
+def home():
+    return render_template("home.html")
+
 @app.route("/categories")
 def categories():
     all_categories = Category.query.all()
-    print(all_categories)
     return render_template('categories.html', categories=all_categories)
 
 @app.route("/category/add", methods=['GET', 'POST'])
@@ -40,6 +43,24 @@ def add_category():
         db.session.commit()
     return render_template("add_category.html")
 
+@app.route("/post/add", methods=['GET', 'POST'])
+def add_post():
+    all_categories = Category.query.all()
+    if request.method == 'POST':
+        post = Post(
+            title = request.form['title'],
+            content = request.form['content'],
+            author = request.form['author'],
+            category_id = int(request.form['category_id'])
+        )
+        db.session.add(post)
+        db.session.commit()
+    return render_template("add_post.html", categories=all_categories)
+
+@app.route("/posts")
+def posts():
+    all_posts = Post.query.all()
+    return render_template("posts.html", posts=all_posts)
 
 with app.app_context():
     db.create_all()

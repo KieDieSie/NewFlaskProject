@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Create a new post</h1>
+
+<form action="/post/add" method="post">
+    <label>Title</label>
+    <input name="title" type="text">
+
+    <label>Content</label>
+    <input name="content" type="text">
+
+    <label>Author</label>
+    <input name="author" type="text">
+
+    <select name="category_id">
+        {% for category in categories %}
+        <option value="{{ category.id }}">{{ category.name }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Create</button>
+</form>
+{% endblock %}
